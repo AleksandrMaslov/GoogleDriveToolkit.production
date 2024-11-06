@@ -1,0 +1,19 @@
+FROM node:18-alpine
+
+ENV VITE_CLIENT_ID=757979034708-fb02vot08bd00kejvqv987qr01dl8f6n.apps.googleusercontent.com
+
+WORKDIR /app
+
+COPY package.json .
+
+RUN npm install
+
+RUN npm i -g serve
+
+COPY . .
+
+RUN npm run build
+
+EXPOSE 3000
+
+CMD [ "serve", "-s", "dist" ]
