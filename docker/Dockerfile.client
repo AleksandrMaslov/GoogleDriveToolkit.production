@@ -1,6 +1,7 @@
 FROM node:18-alpine
 
-ENV VITE_CLIENT_ID=757979034708-fb02vot08bd00kejvqv987qr01dl8f6n.apps.googleusercontent.com
+ARG VITE_CLIENT_ID
+ENV VITE_CLIENT_ID=${VITE_CLIENT_ID}
 
 WORKDIR /app
 
