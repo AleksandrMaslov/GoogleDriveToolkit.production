@@ -25,7 +25,7 @@ services:
     container_name: ${CLIENT_DOMAIN}
     build:
       context: ../${REPO_NAME_BASE}.${CLIENT_DOMAIN}
-      dockerfile: ./docker/Dockerfile.client
+      dockerfile: ../${REPO_NAME_BASE}.production/docker/Dockerfile.client
     ports:
       - "${CLIENT_PORT}:${CLIENT_PORT}"
     restart: always
