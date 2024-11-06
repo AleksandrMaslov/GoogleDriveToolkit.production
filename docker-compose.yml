@@ -24,7 +24,7 @@ services:
   client:
     container_name: ${CLIENT_DOMAIN}
     build:
-    context: ../
+    context: ../../${REPO_NAME_BASE}.${CLIENT_DOMAIN}
     dockerfile: ./docker/Dockerfile.client
     ports:
       - "${CLIENT_PORT}:${CLIENT_PORT}"
@@ -32,6 +32,7 @@ services:
     networks:
       - drivetools-network
     environment:
+      REPO_NAME_BASE: ${REPO_NAME_BASE}
       CLIENT_DOMAIN: ${CLIENT_DOMAIN}
       CLIENT_PORT: ${CLIENT_PORT}
 
