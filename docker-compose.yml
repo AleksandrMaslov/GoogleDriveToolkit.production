@@ -24,7 +24,7 @@ services:
   client:
     container_name: ${CLIENT_DOMAIN}
     build:
-      context: ../../${REPO_NAME_BASE}.${CLIENT_DOMAIN}
+      context: ../${REPO_NAME_BASE}.${CLIENT_DOMAIN}
       dockerfile: ./docker/Dockerfile.client
     ports:
       - "${CLIENT_PORT}:${CLIENT_PORT}"
