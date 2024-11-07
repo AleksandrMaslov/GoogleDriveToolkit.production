@@ -24,20 +24,34 @@ services:
   client:
     container_name: ${CLIENT_DOMAIN}
     build:
-      context: ../${REPO_NAME_BASE}.${CLIENT_DOMAIN}
-      dockerfile: ../${REPO_NAME_BASE}.production/docker/Dockerfile.client
-      args:
-        - VITE_CLIENT_ID=${VITE_CLIENT_ID}
+      context: ./client
+      dockerfile: ./docker/Dockerfile.client.light
     ports:
       - "${CLIENT_PORT}:${CLIENT_PORT}"
     restart: always
     networks:
       - drivetools-network
     environment:
-      REPO_NAME_BASE: ${REPO_NAME_BASE}
       CLIENT_DOMAIN: ${CLIENT_DOMAIN}
       CLIENT_PORT: ${CLIENT_PORT}
-      VITE_CLIENT_ID: ${VITE_CLIENT_ID}
+
+  # client:
+  #   container_name: ${CLIENT_DOMAIN}
+  #   build:
+  #     context: ../${REPO_NAME_BASE}.${CLIENT_DOMAIN}
+  #     dockerfile: ../${REPO_NAME_BASE}.production/docker/Dockerfile.client
+  #     args:
+  #       - VITE_CLIENT_ID=${VITE_CLIENT_ID}
+  #   ports:
+  #     - "${CLIENT_PORT}:${CLIENT_PORT}"
+  #   restart: always
+  #   networks:
+  #     - drivetools-network
+  #   environment:
+  #     REPO_NAME_BASE: ${REPO_NAME_BASE}
+  #     CLIENT_DOMAIN: ${CLIENT_DOMAIN}
+  #     CLIENT_PORT: ${CLIENT_PORT}
+  #     VITE_CLIENT_ID: ${VITE_CLIENT_ID}
 
 networks:
   drivetools-network:
