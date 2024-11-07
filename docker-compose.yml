@@ -25,7 +25,7 @@ services:
     container_name: ${CLIENT_DOMAIN}
     build:
       context: ./client
-      dockerfile: ./docker/Dockerfile.client.light
+      dockerfile: ../docker/Dockerfile.client.light
     ports:
       - "${CLIENT_PORT}:${CLIENT_PORT}"
     restart: always
