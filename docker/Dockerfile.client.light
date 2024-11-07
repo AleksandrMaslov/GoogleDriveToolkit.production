@@ -2,29 +2,7 @@ FROM node:18-alpine
 
 ARG VITE_CLIENT_ID
 
-RUN <<EOF
-node -e "const fs = require('fs');"
-node -e "const path = require('path');"
-
-node -e "function findFiles(dir, regex) {"
-node -e "  const results = [];"
-node -e "  fs.readdirSync(dir, { withFileTypes: true }).forEach((entry) => {"
-node -e "    const fullPath = path.join(dir, entry.name);"
-node -e "    if (regex.test(fullPath)) results.push(fullPath);"
-node -e "  });"
-node -e "  return results;"
-node -e "}"
-
-node -e "const files = findFiles('./assets', /^.*\/index.*\.js$/);"
-node -e "if (files.length) {"
-node -e "  console.log('Found files:', files);"
-node -e "  files.forEach((file) => {"
-node -e ""
-node -e "  });"
-node -e "} else {"
-node -e "  console.log('No matching files found.');"
-node -e "}"
-EOF
+RUN node -e "const fs = require('fs');const path = require('path'); function findFiles(dir, regex) { const results = []; fs.readdirSync(dir, { withFileTypes: true }).forEach((entry) => { const fullPath = path.join(dir, entry.name); if (regex.test(fullPath)) results.push(fullPath); }); return results; } const files = findFiles('./assets', /^.*\/index.*\.js$/); if (files.length) { console.log('Found files:', files); files.forEach((file) => { }); } else { console.log('No matching files found.'); }"
 
 WORKDIR /app
 
