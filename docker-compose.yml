@@ -39,6 +39,24 @@ services:
       CLIENT_PORT: ${CLIENT_PORT}
       VITE_CLIENT_ID: ${VITE_CLIENT_ID}
 
+  database:
+    container_name: ${DATABASE_DOMAIN}
+    image: postgres:11
+    ports:
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
+    volumes:
+      - database:/var/lib/postgresql/data
+      - ./postgres/initpg.sh:/docker-entrypoint-initdb.d/initpg.sh
+    restart: always
+    networks:
+      - back
+    environment:
+      DATABASE_DOMAIN: ${DATABASE_DOMAIN}
+      DATABASE_PORT: ${DATABASE_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
   # client:
   #   container_name: ${CLIENT_DOMAIN}
   #   build:
