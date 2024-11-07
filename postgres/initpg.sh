@@ -2,6 +2,5 @@
 set -e
 
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
-    CREATE DATABASE service1;
-    CREATE DATABASE service2;
+    CREATE DATABASE "$POSTGRES_DB";
 EOSQL
