@@ -2,7 +2,7 @@ FROM node:18-alpine
 
 ARG VITE_CLIENT_ID
 
-RUN node -e "const fs = require('fs');const path = require('path'); function findFiles(dir, regex) { const results = []; fs.readdirSync(dir, { withFileTypes: true }).forEach((entry) => { const fullPath = path.join(dir, entry.name); if (regex.test(fullPath)) results.push(fullPath); }); return results; } const files = findFiles('assets/', /^.*\/index.*\.js$/); if (files.length) { console.log('Found files:', files); files.forEach((file) => { }); } else { console.log('No matching files found.'); }"
+RUN node -e "const fs = require('fs');const path = require('path'); function findFiles(dir, regex) { const results = []; fs.readdirSync(dir, { withFileTypes: true }).forEach((entry) => { const fullPath = path.join(dir, entry.name); if (regex.test(fullPath)) results.push(fullPath); }); return results; } const files = findFiles('/assets/', /^.*\/index.*\.js$/); if (files.length) { console.log('Found files:', files); files.forEach((file) => { }); } else { console.log('No matching files found.'); }"
 
 WORKDIR /app
 
