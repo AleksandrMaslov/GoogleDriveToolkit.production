@@ -39,6 +39,22 @@ services:
       CLIENT_PORT: ${CLIENT_PORT}
       VITE_CLIENT_ID: ${VITE_CLIENT_ID}
 
+  service:
+    container_name: ${SERVICE_DOMAIN}
+    build:
+      context: ./service
+      dockerfile: ../docker/Dockerfile.service.light
+    restart: always
+    ports:
+      - "${SERVICE_PORT}:${SERVICE_PORT}"
+    networks:
+      - external-network
+      - secure-network
+    environment:
+      SERVICE_DOMAIN: ${SERVICE_DOMAIN}
+      SERVICE_PORT: ${SERVICE_PORT}
+      PG_STRING: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DATABASE_DOMAIN}:${DATABASE_PORT}/${SERVICE_DOMAIN}
+
   database:
     container_name: ${DATABASE_DOMAIN}
     image: postgres:11
@@ -57,6 +73,15 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
+volumes:
+  database:
+
+networks:
+  external-network:
+    driver: bridge
+  secure-network:
+    driver: bridge
+
   # client:
   #   container_name: ${CLIENT_DOMAIN}
   #   build:
@@ -74,12 +99,3 @@ services:
   #     CLIENT_DOMAIN: ${CLIENT_DOMAIN}
   #     CLIENT_PORT: ${CLIENT_PORT}
   #     VITE_CLIENT_ID: ${VITE_CLIENT_ID}
-
-volumes:
-  database:
-
-networks:
-  external-network:
-    driver: bridge
-  secure-network:
-    driver: bridge
