@@ -27,6 +27,8 @@ services:
     build:
       context: ./client
       dockerfile: ../docker/Dockerfile.client.light
+      args:
+        - VITE_CLIENT_ID=${VITE_CLIENT_ID}
     ports:
       - "${CLIENT_PORT}:${CLIENT_PORT}"
     restart: always
@@ -35,6 +37,7 @@ services:
     environment:
       CLIENT_DOMAIN: ${CLIENT_DOMAIN}
       CLIENT_PORT: ${CLIENT_PORT}
+      VITE_CLIENT_ID: ${VITE_CLIENT_ID}
 
   # client:
   #   container_name: ${CLIENT_DOMAIN}
