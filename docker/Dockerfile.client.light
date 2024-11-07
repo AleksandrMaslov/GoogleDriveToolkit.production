@@ -1,8 +1,20 @@
 FROM node:18-alpine
 
+ARG VITE_CLIENT_ID
+
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y findutils grep
+
 RUN npm i -g serve
+
+RUN JS_BUNDLE_FILE_PATH=$(find ./ -type f | grep -E '^.*/index.*\.js$') 
+
+RUN echo "Found file at: $JS_BUNDLE_FILE_PATH"
+
+RUN sed -i "s|CLIENT_ID|${VITE_CLIENT_ID} |g" $JS_BUNDLE_FILE_PATH
+
+RUN echo "CLIENT_ID updated."
 
 COPY . .
 
