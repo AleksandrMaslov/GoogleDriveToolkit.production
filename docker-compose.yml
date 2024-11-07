@@ -4,6 +4,7 @@ services:
   nginx:
     container_name: 'nginx'
     image: nginx:latest
+    restart: always
     ports:
       - "80:80"
       - "443:443"
@@ -14,8 +15,7 @@ services:
       - /etc/letsencrypt/live/${DOMAIN}/fullchain.pem:/etc/letsencrypt/live/${DOMAIN}/fullchain.pem
       - /etc/letsencrypt/live/${DOMAIN}/privkey.pem:/etc/letsencrypt/live/${DOMAIN}/privkey.pem
     networks:
-      - drivetools-network
-    restart: always
+      - external-network
     environment:
       NGINX_ENVSUBST_OUTPUT_DIR: /etc/nginx
       DOMAIN: ${DOMAIN}
@@ -29,11 +29,11 @@ services:
       dockerfile: ../docker/Dockerfile.client.light
       args:
         - CLIENT_ID=${VITE_CLIENT_ID}
+    restart: always
     ports:
       - "${CLIENT_PORT}:${CLIENT_PORT}"
-    restart: always
     networks:
-      - drivetools-network
+      - external-network
     environment:
       CLIENT_DOMAIN: ${CLIENT_DOMAIN}
       CLIENT_PORT: ${CLIENT_PORT}
@@ -42,14 +42,14 @@ services:
   database:
     container_name: ${DATABASE_DOMAIN}
     image: postgres:11
+    restart: always
     ports:
       - "${DATABASE_PORT}:${DATABASE_PORT}"
     volumes:
       - database:/var/lib/postgresql/data
       - ./postgres/initpg.sh:/docker-entrypoint-initdb.d/initpg.sh
-    restart: always
     networks:
-      - back
+      - secure-network
     environment:
       DATABASE_DOMAIN: ${DATABASE_DOMAIN}
       DATABASE_PORT: ${DATABASE_PORT}
@@ -68,13 +68,18 @@ services:
   #     - "${CLIENT_PORT}:${CLIENT_PORT}"
   #   restart: always
   #   networks:
-  #     - drivetools-network
+  #     - external-network
   #   environment:
   #     REPO_NAME_BASE: ${REPO_NAME_BASE}
   #     CLIENT_DOMAIN: ${CLIENT_DOMAIN}
   #     CLIENT_PORT: ${CLIENT_PORT}
   #     VITE_CLIENT_ID: ${VITE_CLIENT_ID}
 
+volumes:
+  database:
+
 networks:
-  drivetools-network:
+  external-network:
+    driver: bridge
+  secure-network:
     driver: bridge
