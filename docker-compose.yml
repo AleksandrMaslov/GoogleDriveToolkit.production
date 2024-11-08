@@ -1,6 +1,24 @@
 name: drivetools
 
 services:
+  database:
+    container_name: ${DATABASE_DOMAIN}
+    image: postgres:11
+    restart: always
+    expose:
+      - ${DATABASE_PORT}
+    volumes:
+      - database:/var/lib/postgresql/data
+      - ./postgres/initpg.sh:/docker-entrypoint-initdb.d/initpg.sh
+    networks:
+      - secure-network
+    environment:
+      - DATABASE_DOMAIN=${DATABASE_DOMAIN}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
   nginx:
     container_name: 'nginx'
     image: nginx:latest
@@ -62,24 +80,6 @@ services:
       - SERVICE_PORT=${SERVICE_PORT}
       - DATABASE_DOMAIN=${DATABASE_DOMAIN}
       - PG_STRING=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DATABASE_DOMAIN}:${DATABASE_PORT}/${POSTGRES_DB}
-
-  database:
-    container_name: ${DATABASE_DOMAIN}
-    image: postgres:11
-    restart: always
-    expose:
-      - ${DATABASE_PORT}
-    volumes:
-      - database:/var/lib/postgresql/data
-      - ./postgres/initpg.sh:/docker-entrypoint-initdb.d/initpg.sh
-    networks:
-      - secure-network
-    environment:
-      - DATABASE_DOMAIN=${DATABASE_DOMAIN}
-      - DATABASE_PORT=${DATABASE_PORT}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
 volumes:
   database:
