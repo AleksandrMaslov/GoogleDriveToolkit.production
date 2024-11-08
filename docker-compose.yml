@@ -1,24 +1,6 @@
 name: drivetools
 
 services:
-  database:
-    container_name: ${DATABASE_DOMAIN}
-    image: postgres:11
-    restart: always
-    expose:
-      - ${DATABASE_PORT}
-    volumes:
-      - database:/var/lib/postgresql/data
-      - ./postgres/initpg.sh:/docker-entrypoint-initdb.d/initpg.sh
-    networks:
-      - secure-network
-    environment:
-      DATABASE_DOMAIN: ${DATABASE_DOMAIN}
-      DATABASE_PORT: ${DATABASE_PORT}
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-
   nginx:
     container_name: 'nginx'
     image: nginx:latest
@@ -35,10 +17,10 @@ services:
     networks:
       - external-network
     environment:
-      NGINX_ENVSUBST_OUTPUT_DIR: /etc/nginx
-      DOMAIN: ${DOMAIN}
-      CLIENT_DOMAIN: ${CLIENT_DOMAIN}
-      CLIENT_PORT: ${CLIENT_PORT}
+      - NGINX_ENVSUBST_OUTPUT_DIR=/etc/nginx
+      - DOMAIN=${DOMAIN}
+      - CLIENT_DOMAIN=${CLIENT_DOMAIN}
+      - CLIENT_PORT=${CLIENT_PORT}
 
   client:
     container_name: ${CLIENT_DOMAIN}
@@ -46,21 +28,21 @@ services:
       context: ./client
       dockerfile: ../docker/Dockerfile.client.light
       args:
-        CLIENT_ID: ${CLIENT_ID}
-        CLIENT_PORT: ${CLIENT_PORT}
-        SERVICE_URL: ${PROTOCOL}://${SERVICE_DOMAIN}
+        - CLIENT_ID=${CLIENT_ID}
+        - CLIENT_PORT=${CLIENT_PORT}
+        - SERVICE_URL=${PROTOCOL}://${SERVICE_DOMAIN}
     restart: always
     expose:
       - ${CLIENT_PORT}
     networks:
       - external-network
     environment:
-      PROTOCOL: ${PROTOCOL}
-      CLIENT_DOMAIN: ${CLIENT_DOMAIN}
-      CLIENT_PORT: ${CLIENT_PORT}
-      CLIENT_ID: ${CLIENT_ID}
-      SERVICE_DOMAIN: ${SERVICE_DOMAIN}
-      SERVICE_PORT: ${SERVICE_PORT}
+      - PROTOCOL=${PROTOCOL}
+      - CLIENT_DOMAIN=${CLIENT_DOMAIN}
+      - CLIENT_PORT=${CLIENT_PORT}
+      - CLIENT_ID=${CLIENT_ID}
+      - SERVICE_DOMAIN=${SERVICE_DOMAIN}
+      - SERVICE_PORT=${SERVICE_PORT}
 
   service:
     container_name: ${SERVICE_DOMAIN}
@@ -76,10 +58,28 @@ services:
       - external-network
       - secure-network
     environment:
-      SERVICE_DOMAIN: ${SERVICE_DOMAIN}
-      SERVICE_PORT: ${SERVICE_PORT}
-      DATABASE_DOMAIN: ${DATABASE_DOMAIN}
-      PG_STRING: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DATABASE_DOMAIN}:${DATABASE_PORT}/${POSTGRES_DB}
+      - SERVICE_DOMAIN=${SERVICE_DOMAIN}
+      - SERVICE_PORT=${SERVICE_PORT}
+      - DATABASE_DOMAIN=${DATABASE_DOMAIN}
+      - PG_STRING=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DATABASE_DOMAIN}:${DATABASE_PORT}/${POSTGRES_DB}
+
+  database:
+    container_name: ${DATABASE_DOMAIN}
+    image: postgres:11
+    restart: always
+    expose:
+      - ${DATABASE_PORT}
+    volumes:
+      - database:/var/lib/postgresql/data
+      - ./postgres/initpg.sh:/docker-entrypoint-initdb.d/initpg.sh
+    networks:
+      - secure-network
+    environment:
+      - DATABASE_DOMAIN=${DATABASE_DOMAIN}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
 volumes:
   database:
