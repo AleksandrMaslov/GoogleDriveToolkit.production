@@ -29,10 +29,10 @@ services:
     build:
       context: ./client
       dockerfile: ../docker/Dockerfile.client.light
+        - SERVICE_URL=${PROTOCOL}://${DOMAIN}/api
       args:
         - CLIENT_ID=${CLIENT_ID}
         - CLIENT_PORT=${CLIENT_PORT}
-        - SERVICE_URL=${PROTOCOL}://${SERVICE_DOMAIN}
     restart: always
     expose:
       - ${CLIENT_PORT}
@@ -40,11 +40,10 @@ services:
       - external-network
     environment:
       - PROTOCOL=${PROTOCOL}
+      - DOMAIN=${DOMAIN}
       - CLIENT_DOMAIN=${CLIENT_DOMAIN}
       - CLIENT_PORT=${CLIENT_PORT}
       - CLIENT_ID=${CLIENT_ID}
-      - SERVICE_DOMAIN=${SERVICE_DOMAIN}
-      - SERVICE_PORT=${SERVICE_PORT}
 
   service:
     container_name: ${SERVICE_DOMAIN}
