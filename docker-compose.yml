@@ -29,13 +29,14 @@ services:
       dockerfile: ../docker/Dockerfile.client.light
       args:
         - CLIENT_ID=${CLIENT_ID}
-        - SERVICE_URL=http://${SERVICE_DOMAIN}:${SERVICE_PORT}
+        - SERVICE_URL=${PROTOCOL}://${SERVICE_DOMAIN}
     restart: always
     expose:
       - ${CLIENT_PORT}
     networks:
       - external-network
     environment:
+      PROTOCOL: ${PROTOCOL}
       CLIENT_DOMAIN: ${CLIENT_DOMAIN}
       CLIENT_PORT: ${CLIENT_PORT}
       CLIENT_ID: ${CLIENT_ID}
