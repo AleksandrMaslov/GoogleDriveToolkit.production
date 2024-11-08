@@ -1,6 +1,7 @@
 FROM node:18-alpine
 
 ARG CLIENT_ID
+ARG CLIENT_PORT
 ARG SERVICE_URL
 
 WORKDIR /app
@@ -11,7 +12,7 @@ COPY . .
 
 RUN node -e "const fs = require('fs');const path = require('path'); function findFiles(dir, regex) { const results = []; fs.readdirSync(dir, { withFileTypes: true }).forEach((entry) => { const fullPath = path.join(dir, entry.name); if (regex.test(fullPath)) results.push(fullPath); }); return results; } const files = findFiles('./assets', /^.*\/index.*\.js$/); if (files.length) { files.forEach((file) => { const data = fs.readFileSync(file, 'utf-8'); const newValue = data.replace('CLIENT_ID', '${CLIENT_ID}').replace('SERVICE_URL', '${SERVICE_URL}'); fs.writeFileSync(file, newValue, 'utf-8'); }); }"
 
-EXPOSE 3000
+EXPOSE ${CLIENT_PORT}
 
 CMD [ "serve", "-s", "." ]
 

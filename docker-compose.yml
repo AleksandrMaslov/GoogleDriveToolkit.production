@@ -28,8 +28,9 @@ services:
       context: ./client
       dockerfile: ../docker/Dockerfile.client.light
       args:
-        - CLIENT_ID=${CLIENT_ID}
-        - SERVICE_URL=${PROTOCOL}://${SERVICE_DOMAIN}
+        CLIENT_ID: ${CLIENT_ID}
+        CLIENT_PORT: ${CLIENT_PORT}
+        SERVICE_URL: ${PROTOCOL}://${SERVICE_DOMAIN}
     restart: always
     expose:
       - ${CLIENT_PORT}
@@ -48,15 +49,20 @@ services:
     build:
       context: ./service
       dockerfile: ../docker/Dockerfile.service.light
+      args:
+        SERVICE_PORT: ${SERVICE_PORT}
     restart: always
     expose:
       - ${SERVICE_PORT}
     networks:
       - external-network
       - secure-network
+    depends_on:
+      - ${DATABASE_DOMAIN}
     environment:
       SERVICE_DOMAIN: ${SERVICE_DOMAIN}
       SERVICE_PORT: ${SERVICE_PORT}
+      DATABASE_DOMAIN: ${DATABASE_DOMAIN}
       PG_STRING: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DATABASE_DOMAIN}:${DATABASE_PORT}/${POSTGRES_DB}
 
   database:
