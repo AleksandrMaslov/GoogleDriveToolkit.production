@@ -29,10 +29,10 @@ services:
       dockerfile: ../docker/Dockerfile.client.light
       args:
         - CLIENT_ID=${VITE_CLIENT_ID}
-        - SERVICE_URL=${PROTOCOL}://${SERVICE_DOMAIN}:${SERVICE_PORT}
+        - SERVICE_URL=${PROTOCOL}://${SERVICE_DOMAIN}:${SERVICE_PORT} #???
     restart: always
-    ports:
-      - "${CLIENT_PORT}:${CLIENT_PORT}"
+    expose:
+      - ${CLIENT_PORT}
     networks:
       - external-network
     environment:
@@ -49,8 +49,8 @@ services:
       context: ./service
       dockerfile: ../docker/Dockerfile.service.light
     restart: always
-    ports:
-      - "${SERVICE_PORT}:${SERVICE_PORT}"
+    expose:
+      - ${SERVICE_PORT}
     networks:
       - external-network
       - secure-network
@@ -63,8 +63,8 @@ services:
     container_name: ${DATABASE_DOMAIN}
     image: postgres:11
     restart: always
-    ports:
-      - "${DATABASE_PORT}:${DATABASE_PORT}"
+    expose:
+      - ${DATABASE_PORT}
     volumes:
       - database:/var/lib/postgresql/data
       - ./postgres/initpg.sh:/docker-entrypoint-initdb.d/initpg.sh
