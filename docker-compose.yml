@@ -29,8 +29,8 @@ services:
     build:
       context: ./client
       dockerfile: ../docker/Dockerfile.client.light
-        - SERVICE_URL=${PROTOCOL}://${DOMAIN}/api
       args:
+        - SERVICE_URL=${PROTOCOL}://${DOMAIN}/api
         - CLIENT_ID=${CLIENT_ID}
         - CLIENT_PORT=${CLIENT_PORT}
     restart: always
