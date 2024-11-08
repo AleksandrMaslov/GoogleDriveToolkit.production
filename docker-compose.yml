@@ -21,6 +21,8 @@ services:
       - DOMAIN=${DOMAIN}
       - CLIENT_DOMAIN=${CLIENT_DOMAIN}
       - CLIENT_PORT=${CLIENT_PORT}
+      - SERVICE_DOMAIN=${SERVICE_DOMAIN}
+      - SERVICE_PORT=${SERVICE_PORT}
 
   client:
     container_name: ${CLIENT_DOMAIN}
