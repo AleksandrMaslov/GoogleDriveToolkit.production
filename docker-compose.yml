@@ -28,20 +28,19 @@ services:
       context: ./client
       dockerfile: ../docker/Dockerfile.client.light
       args:
-        - CLIENT_ID=${VITE_CLIENT_ID}
-        - SERVICE_URL=${PROTOCOL}://${SERVICE_DOMAIN}:${SERVICE_PORT} #???
+        - CLIENT_ID=${CLIENT_ID}
+        - SERVICE_URL=http://${SERVICE_DOMAIN}:${SERVICE_PORT}
     restart: always
     expose:
       - ${CLIENT_PORT}
     networks:
       - external-network
     environment:
-      PROTOCOL: ${PROTOCOL}
       CLIENT_DOMAIN: ${CLIENT_DOMAIN}
       CLIENT_PORT: ${CLIENT_PORT}
+      CLIENT_ID: ${CLIENT_ID}
       SERVICE_DOMAIN: ${SERVICE_DOMAIN}
       SERVICE_PORT: ${SERVICE_PORT}
-      VITE_CLIENT_ID: ${VITE_CLIENT_ID}
 
   service:
     container_name: ${SERVICE_DOMAIN}
